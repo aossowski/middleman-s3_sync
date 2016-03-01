@@ -10,6 +10,7 @@ module Middleman
       def initialize(resource, partial_s3_resource)
         @resource = resource
         @path = resource ? resource.destination_path : partial_s3_resource.key
+        @path += ".html" if !resource && options.extensionless_html
         @partial_s3_resource = partial_s3_resource
       end
 
@@ -23,7 +24,12 @@ module Middleman
       end
 
       def remote_path
-        s3_resource ? s3_resource.key : "#{options.prefix}#{path}"
+        if s3_resource
+          s3_resource.key
+        else
+          full_path = "#{options.prefix}#{path}"
+          options.extensionless_html ? full_path.gsub(/\.html/, '') : full_path
+        end
       end
       alias :key :remote_path
 
@@ -68,6 +74,9 @@ module Middleman
 
       def local_path
         local_path = build_dir + '/' + path.gsub(/^#{options.prefix}/, '')
+        # if options.extensionless_html
+        #   local_path += ".html"
+        # end
         if options.prefer_gzip && File.exist?(local_path + ".gz")
           @gzipped = true
           local_path += ".gz"

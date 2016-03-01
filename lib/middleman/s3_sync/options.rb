@@ -23,7 +23,8 @@ module Middleman
         :verbose,
         :content_types,
         :index_document,
-        :error_document
+        :error_document,
+        :extensionless_html
       ]
       attr_accessor *OPTIONS
 
@@ -82,6 +83,10 @@ module Middleman
 
       def version_bucket
         @version_bucket.nil? ? false : @version_bucket
+      end
+
+      def extensionless_html
+        @extensionless_html.nil? ? false : @extensionless_html
       end
 
     end

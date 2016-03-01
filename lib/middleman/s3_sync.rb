@@ -56,7 +56,9 @@ module Middleman
       end
 
       def add_local_resource(mm_resource)
-        s3_sync_resources[mm_resource.destination_path] = S3Sync::Resource.new(mm_resource, remote_resource_for_path(mm_resource.destination_path)).tap(&:status)
+        destination_path = mm_resource.destination_path.dup
+        destination_path.gsub!(/\.html/, '') if s3_sync_options.extensionless_html
+        s3_sync_resources[destination_path] = S3Sync::Resource.new(mm_resource, remote_resource_for_path(destination_path)).tap(&:status)
       end
 
       def remote_only_paths
