@@ -74,9 +74,6 @@ module Middleman
 
       def local_path
         local_path = build_dir + '/' + path.gsub(/^#{options.prefix}/, '')
-        # if options.extensionless_html
-        #   local_path += ".html"
-        # end
         if options.prefer_gzip && File.exist?(local_path + ".gz")
           @gzipped = true
           local_path += ".gz"
